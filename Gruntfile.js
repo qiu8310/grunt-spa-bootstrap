@@ -12,6 +12,8 @@ module.exports = function (grunt) {
   // load all npm grunt tasks
   require('load-grunt-tasks')(grunt);
 
+  var qiniuConfig = require(process.env.HOME + '/qiniu.json');
+
   // Project configuration.
   grunt.initConfig({
     jshint: {
@@ -29,6 +31,35 @@ module.exports = function (grunt) {
     // Before generating any new files, remove any previously-created files.
     clean: {
       tests: ['tmp']
+    },
+
+    deployAsset: {
+      bootstrap: {
+        options: {
+          mapUpload: true,
+          overwrite: true,
+          deleteUploaded: false,
+
+          uploader: 'qiniu',
+          qiniu: {
+            accessKey: qiniuConfig.accessKey,
+            secretKey: qiniuConfig.secretKey,
+            bucket: 'design-res'
+          }
+        },
+        files: {
+          'bootstrap.js': 'bootstrap.js',
+          'bootstrap.min.js': 'bootstrap.min.js'
+        }
+      }
+    },
+
+    uglify: {
+      bootstrap: {
+        files: {
+          'bootstrap.min.js': 'bootstrap.js'
+        }
+      }
     },
 
     // Configuration to be run (and then tested).
@@ -67,5 +98,7 @@ module.exports = function (grunt) {
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
+
+  grunt.registerTask('deploy', ['uglify:bootstrap', 'deployAsset:bootstrap']);
 
 };

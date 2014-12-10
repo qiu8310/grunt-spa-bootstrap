@@ -22,7 +22,9 @@
     "grunt-contrib-nodeunit": "~0.3.0",
     "grunt": "~0.4.2",
     "jshint-stylish": "~0.1.5",
-    "load-grunt-tasks": "~0.3.0"
+    "load-grunt-tasks": "~0.3.0",
+    "grunt-deploy-asset": "0.0.4",
+    "grunt-contrib-uglify": "^0.6.0"
   },
   "scripts": {
     "test": "grunt test"
