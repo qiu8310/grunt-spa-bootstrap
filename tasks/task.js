@@ -76,6 +76,8 @@ module.exports = function (grunt) {
     opts.app = opts.app || this.target;
     opts.index = opts.index || getDeployAssetIndexPage(grunt.config.get('deployAsset.options.assetMapJsonFile'));
 
+
+
     if (!opts.index || !/\.htm[l]?\b/.test(opts.index)) {
       grunt.log.error('Can not find index page');
       done();

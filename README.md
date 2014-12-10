@@ -1,6 +1,10 @@
 # spaBootstrap
 
-> 用一个固定的HTML文件启动angular应用，解除因为前端修改而引起的后端重新部署问题
+> 1. 用一个固定的HTML文件启动angular应用，解除因为前端修改而引起的后端重新部署的问题
+> 2. 自动用 localStorage 缓存所有的 CSS/JS 资源，第一次加载完后每次都能迅速打开
+> 3. 支持自动更新，有新版本发布后，首页自动弹出更新提醒，一键更新到最新版本
+> 4. 多版本切换，在首页URL后面加上参数 `version=xx`，可以访问到之前发布的任意版本
+
 > 最好配合 [grunt-deploy-asset](https://github.com/qiu8310/grunt-deploy-asset) 一起使用
 
 ## Getting Started
@@ -40,7 +44,7 @@ grunt.initConfig({
 grunt spaBootstrap
 grunt spaBootstrap:you_target:insert
 
-# 更新第一个版本的 index 文件
+# 更新第一个版本的 meta 信息
 grunt spaBootstrap:you_target:update:1  
 ```
 

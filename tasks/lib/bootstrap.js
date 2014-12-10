@@ -10,6 +10,7 @@
 
 var request = require('request'),
   path = require('path'),
+  fs = require('fs'),
   Q = require('q');
 
 var reScript = /<script(?:\s[^>]*)?\ssrc=([\'"])(.*?)\1[^>]*>[^<]*<\/script>/g,
@@ -36,14 +37,14 @@ function post(path, meta) {
 var Bootstrap = {
   // overwrite by grunt option
   api: function(method) {
-    return 'http://mora.com/spa-bootstrap.php?m=' + method;
+    return 'http://mora.sinaapp.com/spa-bootstrap.php?m=' + method;
   },
 
   // overwrite by grunt
   file: function(content) {},
 
   // overwrite by grout option bootstrapJs
-  bootstrapJs: 'http://design-res.qiniudn.com/bootstrap.js',
+  bootstrapJs: 'http://design-res.qiniudn.com/bootstrap.min.js',
 
 
   insertMeta: function(meta) {
@@ -85,19 +86,35 @@ function getAbsoluteFile(relativeFile, refFile) {
     if (part === '..') {
       basedir = path.dirname(basedir);
     } else if (part !== '.') {
-      basedir = path.join(basedir, part);
+      basedir += '/' + part;
     }
   });
   return basedir;
 }
 
 /**
+ * 判断文件是否是本地的文件
+ */
+function isFileLocal(file) {
+  var hasHttp = false;
+
+  file = file.replace(/^https?:\/\//, function() {
+    hasHttp = true;
+    return '';
+  });
+
+  return !hasHttp || (hasHttp && /^(?:localhost|192|172|127)\b/.test(file));
+}
+
+/**
  *  解析 index 文件，获取此文件的 head、body、bodyAttrs、js、css、img 信息
+ *
+ *  注意：如果 index 文件在本地的域名下，表示是在本地调试，则不处理它上面的 CSS/JS 资源
  */
 function parseIndexPage(index) {
   var deferred = Q.defer();
 
-  request.get(index, function(err, response, html) {
+  function parse(err, response, html) {
     var data = {
         head: null,
         body: null,
@@ -114,6 +131,7 @@ function parseIndexPage(index) {
       deferred.reject(err);
     }
 
+
     // Step 1: 按先后顺序找出 HTML 中所有 js
     html = html.replace(reScript, function(raw, quote, src) {
       data.js.push(src);
@@ -128,6 +146,7 @@ function parseIndexPage(index) {
 
     // Step 3: 去掉 HTML 中的所有注释，注释不要去掉，要不会影响生成 bootstrap 文件
     // html = html.replace(/<\!--.*?-->/g, '');
+
 
     // Step 4: 取出 head 标签之间的所有内容（注意：压缩后的代码可能不以 </head> 结尾，但一定会有 <body attribute...>
     var match = html.match(/<head>([\s\S]*?)(?:<\/head>|<body\b)/i);
@@ -159,33 +178,49 @@ function parseIndexPage(index) {
 
     // Step 6: 找出 HTML 及 所有 CSS 中的图片
     re = /(?:src=|url\(\s*)['"]?([^'"\)]+)['"]?\s*\)?/g;
-    Q.all(data.css.map(function(file) {
-      var defer = Q.defer();
-      // 得到所有 CSS 的 content
-      request.get(file, function(err, response, content) {
-        if (err) {
-          defer.reject(err);
+    if (data.css.length) {
+      Q.all(data.css.map(function(file) {
+        var defer = Q.defer();
+        if (isFileLocal(file)) {
+          defer.resolve({file: file, content: ''});
         } else {
-          defer.resolve({file: file, content: content});
-        }
-      });
-      return defer.promise;
-    })).then(
-      function(contents) {
-        // 解析里面的图片
-        contents.concat({file: index, content: html}).forEach(function(obj) {
-          obj.content.replace(re, function(raw, url) {
-            var ext = url.split(/[#\?]/).shift().split('.').pop();
-            if (allowedImgExtensions.indexOf(ext) >= 0) {
-              data.img.push(getAbsoluteFile(url, obj.file));
+          // 得到所有 CSS 的 content
+          request.get(file, function(err, response, content) {
+            if (err) {
+              defer.reject(err);
+            } else {
+              defer.resolve({file: file, content: content});
             }
           });
-        });
-        deferred.resolve({html: originalHtml, data: data});
-      },
-      function() { deferred.reject(new Error('Request css file error, please retry later')) }
-    );
-  });
+        }
+        return defer.promise;
+      })).then(
+        function(contents) {
+          // 解析里面的图片
+          contents.concat({file: index, content: html}).forEach(function(obj) {
+            obj.content.replace(re, function(raw, url) {
+              var ext = url.split(/[#\?]/).shift().split('.').pop();
+              if (allowedImgExtensions.indexOf(ext) >= 0) {
+                data.img.push(getAbsoluteFile(url, obj.file));
+              }
+            });
+          });
+          deferred.resolve({html: originalHtml, data: data});
+        },
+        function() { deferred.reject(new Error('Request css file error, please retry later')) }
+      );
+    }
+
+  }
+
+
+  if (/^https?:\/\//.test(index)) {
+    request.get(index, parse);
+  } else {
+    fs.readFile(index, function(err, data) {
+      parse(err, null, data.toString());
+    });
+  }
 
   return deferred.promise;
 }
