@@ -807,4 +807,11 @@
 
   BS.run(document.querySelector('[spa-bootstrap]').getAttribute('spa-bootstrap'));
 
+
+  if ( typeof module === "object" && typeof module.exports === "object" ) {
+    module.exports = BS;
+  } else {
+    window.BS = BS;
+  }
+
 })();

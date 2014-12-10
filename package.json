@@ -9,7 +9,11 @@
     "url": ""
   },
   "keywords": [
-    "gruntplugin"
+    "gruntplugin",
+    "bootstrap for spa",
+    "bootstrap",
+    "spa",
+    "single page application"
   ],
   "main": "Gruntfile.js",
   "engines": {

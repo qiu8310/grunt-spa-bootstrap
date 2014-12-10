@@ -1,0 +1,29 @@
+{
+  "name": "spa-bootstrap",
+  "version": "0.0.1",
+  "homepage": "https://github.com/qiu8310/grunt-spa-bootstrap",
+  "authors": [
+    "Zhonglei Qiu <qiuzhongleiabc@126.com>"
+  ],
+  "description": "单页面的启动JS",
+  "main": "bootstrap.js",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "single page application",
+    "spa",
+    "bootstrap",
+    "bootstrap for spa"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tasks",
+    "tmp"
+  ]
+}
