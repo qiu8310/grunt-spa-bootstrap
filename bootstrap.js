@@ -714,7 +714,7 @@
           if (lastCheck.version > currentVersion) {
             slideDownUpdateTip(lastCheck.version);
             return ;
-          } else if (currentTime - lastCheck.time < 24 * 3600 * 1000) {
+          } else if (currentTime - lastCheck.time < 2 * 3600 * 1000) {
             return ;
           }
         }
@@ -743,7 +743,7 @@
         this.fetchAssets(diff.added, function(dataMap) { // 拉取新的 asset，并缓存
           var failLoadAssets = [];
           each(dataMap, function(content, key) {
-            if (content) {
+            if (content !== false) {
               // 替换 CSS 中的相对地址
               if ('css' === extname(key)) {
                 content = replaceCssRelativeAsset(key, content);
