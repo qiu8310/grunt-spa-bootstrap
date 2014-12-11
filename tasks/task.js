@@ -83,6 +83,11 @@ module.exports = function (grunt) {
       done();
     }
 
+    if (!opts.token) {
+      grunt.log.error('No spa bootstrap token');
+      done();
+    }
+
 
     method = args.shift() || 'insert';
 
@@ -95,7 +100,7 @@ module.exports = function (grunt) {
     opts.version = ver;
 
 
-    var meta = {app: opts.app, index: opts.index, version: ver};
+    var meta = {app: opts.app, index: opts.index, version: ver, token: opts.token};
     var bsError = function(e) { console.error(e); done(false);},
       bsDone = function(data) { console.log(data); done(); };
 

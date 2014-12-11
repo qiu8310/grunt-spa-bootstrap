@@ -28,6 +28,7 @@ grunt.initConfig({
     options: {
       index: null,
       app: 'appName',
+      token: '...',
       version: 0,
       bootstrap: 'dist/bootstrap.html'
     },
@@ -69,6 +70,15 @@ Type: `int`
 Default value: `[当前 grunt 命令的 target]`
 
 主要用来区别其它的应用的配置，以免冲突
+
+#### options.token
+Type: `string`
+
+Default value: `null`
+
+任意一个 app 必须对应于一个 token，token 可以在网站 (http://sinaapp.mora.com/spa-bootstrap-manager.php)[http://sinaapp.mora.com/spa-bootstrap-manager.php] 管理
+
+一个 token 可以添加多个 app，请保管好你的 token，不能漏洞
 
 #### options.version
 Type: `int`
