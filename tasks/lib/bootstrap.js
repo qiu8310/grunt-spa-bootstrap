@@ -18,6 +18,12 @@ var reScript = /<script(?:\s[^>]*)?\ssrc=([\'"])(.*?)\1[^>]*>[^<]*<\/script>/g,
 
 function post(path, meta) {
   var deferred = Q.defer();
+  console.log('Request: ' + path, '\n\rData: ');
+  Object.keys(meta).forEach(function(key) {
+    var val = meta[key]; console.log('\t' + key + ' => ' + (val.length > 50 ? val.substr(0, 50) + '...' : val));
+  });
+  console.log();
+
   request.post(path, {form: meta}, function(err, response, body) {
     if (err) {
       deferred.reject(err);
@@ -25,6 +31,7 @@ function post(path, meta) {
       try {
         deferred.resolve(JSON.parse(body.trim()));
       } catch (e) {
+        console.log('Body: ' + body);
         e.message = 'parse response body to json error';
         deferred.reject(e);
       }
