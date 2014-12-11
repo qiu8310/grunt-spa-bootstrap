@@ -522,9 +522,7 @@
     '有新版本可用，请点此更新</a>';
     document.body.appendChild(stripe);
     stripe.querySelector('a').addEventListener('click', function() {
-      // 清除版本号，再刷新页面即可
-      BS.version(0);
-      location.reload();
+      BS.forceReload();
     });
 
     var allSeconds = 1000,
@@ -545,6 +543,11 @@
   }
 
   BS = {
+    forceReload: function() {
+      // 清除版本号，再刷新页面即可
+      this.version(0);
+      location.reload();
+    },
     version: function(v) {
       if (v !== undefined) {
         this._version = Store.set('version', parseInt(v, 10));
@@ -714,7 +717,7 @@
           if (lastCheck.version > currentVersion) {
             slideDownUpdateTip(lastCheck.version);
             return ;
-          } else if (currentTime - lastCheck.time < 2 * 3600 * 1000) {
+          } else if (currentTime - lastCheck.time < 3600 * 1000) {
             return ;
           }
         }
@@ -723,6 +726,8 @@
           Store.set('lastCheck', {time: currentTime, version: data.version});
           if (data.version > currentVersion) {
             slideDownUpdateTip(data.version);
+          } else if (data.version < currentVersion) {
+            self.forceReload();
           }
         });
       }, 2000);
@@ -743,7 +748,7 @@
         this.fetchAssets(diff.added, function(dataMap) { // 拉取新的 asset，并缓存
           var failLoadAssets = [];
           each(dataMap, function(content, key) {
-            if (content !== false) {
+            if (content) {
               // 替换 CSS 中的相对地址
               if ('css' === extname(key)) {
                 content = replaceCssRelativeAsset(key, content);
