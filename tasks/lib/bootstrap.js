@@ -141,13 +141,13 @@ function parseIndexPage(index) {
 
     // Step 1: 按先后顺序找出 HTML 中所有 js
     html = html.replace(reScript, function(raw, quote, src) {
-      data.js.push(src);
+      data.js.push(getAbsoluteFile(src, index));
       return '';
     });
 
     // Step 2: 按先后顺序找出 HTML 中所有 css
     html = html.replace(reStyle, function(raw, quote, href) {
-      data.css.push(href);
+      data.css.push(getAbsoluteFile(href, index));
       return '';
     });
 
