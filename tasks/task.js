@@ -56,6 +56,8 @@ module.exports = function (grunt) {
       index: null,
       version: null,
       app: null,
+      token: null,
+      secureCode: null,
       bootstrap: null,
       bootstrapJs: 'http://design-res.qiniudn.com/bootstrap.js'
     }), method, args = this.args, ver;
@@ -83,8 +85,8 @@ module.exports = function (grunt) {
       done();
     }
 
-    if (!opts.token) {
-      grunt.log.error('No spa bootstrap token');
+    if (!opts.token || !opts.secureCode) {
+      grunt.log.error('Token and secureCode needed');
       done();
     }
 
@@ -100,7 +102,7 @@ module.exports = function (grunt) {
     opts.version = ver;
 
 
-    var meta = {app: opts.app, index: opts.index, version: ver, token: opts.token};
+    var meta = {app: opts.app, index: opts.index, version: ver, token: opts.token, 'secure_code': opts.secureCode};
     var bsError = function(e) { console.error(e); done(false);},
       bsDone = function(data) { console.log(data); done(); };
 
