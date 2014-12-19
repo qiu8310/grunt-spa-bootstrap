@@ -248,7 +248,7 @@ function generateBootstrapContent(meta, indexHtml, indexData) {
   indexHtml = indexHtml
     .replace(reScript, replaceByEmpty)
     .replace(reStyle, replaceByEmpty)
-    .replace(indexData.head, '<title>Loading...</title>')
+    .replace(indexData.head, '<meta charset="utf-8"><title>Loading...</title>')
     .replace(indexData.body, '<h1 style="text-align:center">Loading...</h1>' + script)
     .replace(/<body[^>]*>/, '<body>');  // body上的属性保存在meta中，到时直接可以更新，不用写到bootstrap中，保持这个文件精简
 

@@ -519,7 +519,7 @@
 
     stripe.style.cssText = "position:fixed;top:0;left:0;right:0;height:0;background:rgba(0,0,0,.8);z-index:99999;overflow:hidden;";
     stripe.innerHTML = '<a style="display:block;line-height:50px;color:red;text-align:center;font-size:18px;">' +
-    '有新版本可用，请点此更新</a>';
+    'There is a new version published, please click here to update!</a>';
     document.body.appendChild(stripe);
     stripe.querySelector('a').addEventListener('click', function() {
       BS.forceReload();

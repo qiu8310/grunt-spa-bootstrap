@@ -108,7 +108,8 @@ Default value: `null`
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-_(Nothing yet)_
+
+* 0.0.2   在生成的 bootstrap.html 中指定 utf8 编码
 
 ## License
 Copyright (c) 2014 Zhonglei Qiu. Licensed under the MIT license.

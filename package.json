@@ -1,6 +1,6 @@
 {
   "name": "grunt-spa-bootstrap",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "用一个固定的HTML文件启动单页面的应用，解除因为前端修改而引起的后端重新部署问题",
   "repository": "https://github.com/qiu8310/grunt-spa-bootstrap",
   "author": {
