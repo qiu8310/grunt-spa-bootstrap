@@ -109,7 +109,8 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
-* 0.0.2   在生成的 bootstrap.html 中指定 utf8 编码
+* 2015-01-30         图片支持的格式中添加了 SVG 格式，在 CSS 中如果有 SVG 也会检查到（没有更新 NPM）
+* 2014-12-19 0.0.2   在生成的 bootstrap.html 中指定 utf8 编码
 
 ## License
 Copyright (c) 2014 Zhonglei Qiu. Licensed under the MIT license.

@@ -131,7 +131,7 @@ function parseIndexPage(index) {
         img: []
       },
       originalHtml = html,
-      allowedImgExtensions = ['png', 'gif', 'jpg', 'jpeg'],
+      allowedImgExtensions = ['png', 'gif', 'jpg', 'jpeg', 'svg'],
       re;
 
     if (err) {
